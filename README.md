@@ -1,4 +1,4 @@
 MARC
 ====
 
-Programs for working with a MARC records
+Programs for working with MARC records

@@ -1,0 +1,110 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Build JMrcLib" basedir="." default="build">
+
+	<property file="build.properties" />
+	
+	<path id="test.classpath">
+		<pathelement location="${build.dir}" />
+		<pathelement location="${build.test.dir}" />
+		<pathelement location="./test/resources" />
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.test.dir}"/>
+		<mkdir dir="${release.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+		<ivy:retrieve />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${build.test.dir}" />
+		<delete dir="${lib.dir}"/>
+	</target>
+
+	<target name="compile">
+		<javac 
+			srcdir="${src.dir}" 
+			includes="jmrclib/**" 
+			excludes="" 
+			destdir="${build.dir}" 
+			debug="on"  
+			encoding="UTF-8"
+			includeAntRuntime="false"
+			verbose="no"
+		>
+			<classpath refid="test.classpath" />
+		</javac>
+	</target>
+	
+	<target name="compile-test" depends="compile">
+		<javac 
+			srcdir="${src.test.dir}" 
+			includes="jmrclib/**" 
+			excludes="" 
+			destdir="${build.test.dir}" 
+			debug="on"  
+			encoding="UTF-8"
+			includeAntRuntime="false"
+			verbose="no"
+		>
+			<classpath refid="test.classpath" />
+		</javac>
+	</target>
+
+	<target name="run-test" depends="compile-test">
+		<junit fork="true" haltonfailure="on" printsummary="off">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<sysproperty key="file.encoding" value="UTF-8"/>
+			<formatter type="plain" usefile="false" />
+			<classpath refid="test.classpath" />
+			<batchtest>
+                <fileset dir="${src.test.dir}">
+
+                </fileset>
+            </batchtest>
+		</junit>
+	</target>
+	
+	<target name="javadoc">
+		<javadoc packagenames="jmrclib"
+	    		sourcepath="${src.dir}"
+				encoding="UTF-8"
+	        	defaultexcludes="yes"
+	        	destdir="${build.dir}/javadoc"
+	        	author="true"
+	        	version="true"
+	        	use="true"
+	        	windowtitle="MARC API"
+				additionalparam="-Xdoclint:accessibility,missing,reference"
+			>
+	    	<doctitle><![CDATA[<h1>MARC API</h1>]]></doctitle>
+	    	<bottom><![CDATA[<i>Copyright &#169; 2015 Dmitry Malinin. All Rights Reserved.</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="build.jar" depends="init, compile, compile-test, run-test, javadoc" description="build release">
+		<jar destfile="${release.dir}/${jar.name}" basedir="${build.dir}">
+			<exclude name="javadoc/**"/>
+			<manifest>
+			    <section name="jmrclib">
+					<attribute name="Specification-Title" value="JMrcLib"/>
+					<attribute name="Specification-Version" value="${spec.version}"/> 
+					<attribute name="Specification-Vendor" value="${author}"/> 
+					<attribute name="Implementation-Title" value="JMrcLib"/>
+					<attribute name="Implementation-Version" value="${impl.version}"/> 
+					<attribute name="Implementation-Vendor" value="${author}"/>
+				</section>
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/${javadoc.jar.name}" basedir="${build.dir}/javadoc"/>
+	</target>
+
+
+	<target name="build" depends="build.jar, clean" />
+</project>
+
