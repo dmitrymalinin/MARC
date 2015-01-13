@@ -69,7 +69,7 @@ public class FieldImpl implements Field {
 				{
 				case ST_SF_CODE:
 					state = ST_SF_DATA_BEGIN;
-					sfcode = (char) buf[i];
+					sfcode = (char) (buf[i]&0xFF);
 					sfdatalen = 0;
 					break;
 				case ST_SF_DATA_BEGIN:

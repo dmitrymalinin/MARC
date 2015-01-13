@@ -16,11 +16,11 @@ import org.junit.Test;
 
 public class InputSourceTest {
 	/**
-	 * Тест нового варианта библиотеки
+	 * Тест источника записей
 	 * @throws Exception 
 	 */
 	@Test
-	public void test2() throws Exception
+	public void testInputSource() throws Exception
 	{
 		final DefaultRecordFactory recordFactory = new DefaultRecordFactory("001");
 		InputStream in1 = getClass().getResourceAsStream("/rec1.mrc");

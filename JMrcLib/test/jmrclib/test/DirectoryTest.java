@@ -13,7 +13,7 @@ import jmrclib.Directory;
 public class DirectoryTest {
 
 	@Test
-	public void test() {
+	public void testDirectory() {
 		String src = 
 				"01005"
 				+ "nam a2200253 i 4500"

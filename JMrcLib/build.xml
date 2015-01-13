@@ -57,16 +57,12 @@
 	</target>
 
 	<target name="run-test" depends="compile-test">
-		<junit fork="true" haltonfailure="on" printsummary="off">
+		<junit fork="true" haltonfailure="on" haltonerror="on" printsummary="off">
 			<sysproperty key="user.dir" value="${basedir}"/>
 			<sysproperty key="file.encoding" value="UTF-8"/>
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />
-			<batchtest>
-                <fileset dir="${src.test.dir}">
-
-                </fileset>
-            </batchtest>
+			<test name="jmrclib.test.AllTests" />
 		</junit>
 	</target>
 	

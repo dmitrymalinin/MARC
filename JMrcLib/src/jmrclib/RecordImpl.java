@@ -28,6 +28,9 @@ public class RecordImpl implements Record {
 	/** Directory */
 	private final Directory dir;
 	
+	/** yyyyMMddHHmmss */
+	private static final SimpleDateFormat latestTransactionDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	
 	public RecordImpl(byte[] buf, int offset, int length, String idFieldCode, FieldFactory fieldFactory, Charset charset) throws MrcException, NoSuchAlgorithmException {
 
 		if (buf == null) throw new MrcException("RecordImpl: wrong buf parameter");
@@ -40,7 +43,7 @@ public class RecordImpl implements Record {
 			throw new MrcException(String.format("RecordImpl: Bad record format: record terminator (ASCII 1D hex) check failed. Actially the record ended with 0x%X", buf[length-1]));
 		}
 		
-		if (idFieldCode.length() != 3 && idFieldCode.length() != 4) throw new MrcException("idFieldCode must be 3 or 4 chars");
+		if (idFieldCode != null && idFieldCode.length() != 3 && idFieldCode.length() != 4) throw new MrcException("idFieldCode must be 3 or 4 chars");
 
 		this.buf = new byte[length];
 		System.arraycopy(buf, offset, this.buf, 0, length);
@@ -48,8 +51,8 @@ public class RecordImpl implements Record {
 		this.fieldFactory = fieldFactory;
 		this.charset = charset;
 
-        this.type = (char) this.buf[6];
-        this.biblevel = (char) this.buf[7];
+        this.type = (char) (this.buf[6]&0xFF);
+        this.biblevel = (char) (this.buf[7]&0xFF);
         
         this.baseOffset = Utils.BytesToInt2(this.buf, 12, 5);        
     	if (this.baseOffset == 0 || this.baseOffset >= length - 1/*except RT*/)
@@ -236,8 +239,8 @@ public class RecordImpl implements Record {
 				final String datestr = sf.getData();
 				if (datestr != null && !datestr.isEmpty())
 				{
-					final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-					res = df.parse(datestr);
+//					final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+					res = latestTransactionDateFormat.parse(datestr);
 				}
 			}
 		}		

@@ -3,7 +3,7 @@ package jmrclib;
 import java.util.Date;
 
 /**
- *  MARC запись без привязки к конкретному формату. Реализует {@code Iterable}
+ *  MARC запись без привязки к конкретному формату. Наследует {@code Iterable}
  * @author malinin
  *
  */
