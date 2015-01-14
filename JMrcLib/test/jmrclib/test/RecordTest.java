@@ -1,6 +1,7 @@
 package jmrclib.test;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
@@ -87,5 +88,14 @@ public class RecordTest {
 		AtomicInteger totalFields = new AtomicInteger(0);
 		rec.forEach(field -> totalFields.incrementAndGet());
 		assertEquals("Fields count test failed.", 19, totalFields.get());
+	}
+	
+	@Test
+	public void testToString() throws Exception
+	{
+		Record rec = getRecord(null);
+		URL url = RecordTest.class.getResource("/rec1.txt");
+		String expectedResult = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
+		assertEquals("testToString failed", expectedResult, rec.toString());
 	}
 }

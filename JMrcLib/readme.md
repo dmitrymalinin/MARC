@@ -42,7 +42,7 @@ try (InputSource mrcSource = new InputSource(in, recordFactory))
  - первое поле с заданным тегом
  
 Пример.
-```
+```java
 Record record;
 ...
 for (Field field100: record.getFields("100"))
@@ -64,7 +64,7 @@ for (Field field100: record.getFields("100"))
  - первое подполе с заданным тегом
   
 Пример.
-```
+```java
 Field field;
 ...
 Subfield sfA = field.getFirstSubfield('a');

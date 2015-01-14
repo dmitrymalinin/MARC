@@ -57,9 +57,8 @@ public interface Record extends Iterable<Field>{
 	/**
 	 * Leader
 	 * @return leader as String
-	 * @throws Exception 
 	 */
-	String getLeader() throws Exception;
+	String getLeader();
 	
 	/**
 	 * Возвращает список полей, или пустой список, если такого поля нет.

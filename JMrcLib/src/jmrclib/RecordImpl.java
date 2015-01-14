@@ -95,7 +95,7 @@ public class RecordImpl implements Record {
 	}
 	
 	@Override
-	public String getLeader() throws Exception
+	public String getLeader()
 	{
 		return new String(buf, 0, LeaderLength, charset);
 //		return Utils.decodeBuf(buf, 0, LeaderLength, charsetDecoder);
@@ -247,4 +247,27 @@ public class RecordImpl implements Record {
 			
 		return res;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder(5000);
+		sb.append("Leader ").append(getLeader());
+		for (Field f : this) {
+			sb.append('\n');
+			if (f.isControl())
+				sb.append(f.getTag()).append("    ").append(f.getFirstSubfield('\0').getData());
+			else
+			{
+				sb.append(f.getTag()).append(' ').append(' ').append(f.getInd1()==' '?'#':f.getInd1()).append(f.getInd2()==' '?'#':f.getInd2());
+				for (Subfield sf : f) 
+				{
+					sb.append("\n       "); 
+					sb.append('$').append(sf.getCode()).append(sf.getData());
+				}						
+			}
+		}
+
+		return sb.toString();
+	}
+	
 }
